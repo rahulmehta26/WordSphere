@@ -4,7 +4,7 @@
     "slug": "WordSphere",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "./src/assets/images/react-native-logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "",
+        "foregroundImage": "./src/assets/images/react-native-logo.png",
         "backgroundColor": "#ffffff"
       }
     },
