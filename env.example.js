@@ -1,2 +1,1 @@
-API_KEY = ''
-API_HOST = ''
+API_KEY = "YOUR_API_KEY"
