@@ -1,10 +1,10 @@
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import React from 'react';
 
-const CustomSafeAreaView = ({children}) => {
+const CustomSafeAreaView = ({children, customStyle }) => {
   return (
 
-    <SafeAreaView style = {styles.container} >
+    <SafeAreaView style = {[styles.container, customStyle]} >
       {children}
     </SafeAreaView>
 

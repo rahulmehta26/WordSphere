@@ -13,6 +13,8 @@ const Btn = ({ title, onPress }) => {
 
   const customStyles = {
     width: width * 0.9,
+    height: height * 0.065,
+    marginVertical: height * 0.005
   };
 
   return (

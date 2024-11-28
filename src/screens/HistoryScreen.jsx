@@ -12,23 +12,17 @@ import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import Header from "../components/Header";
 import CustomText from "../components/CustomText";
 import Btn from "../components/Btn";
-import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from "react-native-heroicons/outline";
+import {
+  TrashIcon,
+} from "react-native-heroicons/outline";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HistoryScreen = () => {
   const { width, height } = useWindowDimensions();
-  const [isToggled, setIsToggled] = useState({});
   const [historyData, setHistoryData] = useState([]);
 
   const customStyle = {
     gap: 5,
-  };
-
-  const toggleCard = (index) => {
-    setIsToggled((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
   };
 
   const fetchHistory = async () => {
@@ -45,7 +39,7 @@ const HistoryScreen = () => {
   const deleteCard = async (index) => {
     try {
       const updatedHistory = historyData.filter((item, i) => i !== index);
-      setHistoryData(updatedHistory); 
+      setHistoryData(updatedHistory);
 
       await AsyncStorage.setItem("wordHistory", JSON.stringify(updatedHistory));
     } catch (error) {
@@ -56,179 +50,148 @@ const HistoryScreen = () => {
   const clearHistory = async () => {
     try {
       await AsyncStorage.removeItem("wordHistory");
-      setHistoryData([]); 
-    } catch (error) {
-    }
+      setHistoryData([]);
+    } catch (error) {}
   };
 
-
   useEffect(() => {
-    fetchHistory(); 
+    fetchHistory();
   }, []);
 
   return (
     <CustomSafeAreaView>
       <Header isBackBtn={true} title="History" />
 
-{
-   historyData?.length === 0 ? (
-
-    <View
-    style ={{
-      flex:1,
-      justifyContent:'center',
-      alignItems:'center'
-    }}
-    >
-      
-      <Image 
-       source={require('../assets/images/nothing.png')}
-       style = {{
-        width: width * 0.8,
-        height: height * 0.4,
-        resizeMode:'cover'
-       }}
-      />
-
-      <CustomText variants="large" styles={{fontWeight:'bold'}} >Nothing to show </CustomText>
-    </View>
-  ) : (
-
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-    >
-      {historyData?.map((info, index) => {
-    
-            const toggled = isToggled[index];
-    
-        return (
-          <View key={index} style={[styles.cardContainer, customStyle]}>
-            <TouchableOpacity
+      <View style={{ flex: 1, marginTop: 15, marginBottom: height * 0.08 }}>
+        {historyData?.length === 0 ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../assets/images/nothing.png")}
               style={{
-                position: "absolute",
-                right: 26,
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-                zIndex:1
+                width: width * 0.8,
+                height: height * 0.4,
+                resizeMode: "cover",
               }}
-            >
-              {toggled ? (
-                <ChevronUpIcon
-                  size={24}
-                  color="black"
-                  onPress={() => toggleCard(index)}
-                />
-              ) : (
-                <ChevronDownIcon
-                  size={24}
-                  color="black"
-                  onPress={() => toggleCard(index)}
-                />
-              )}
-            </TouchableOpacity>
-    
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                right: 0,
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-                zIndex:1
-              }}
-              onPress={() => deleteCard(index)}
-            >
-    
-                <TrashIcon
-                  size={20}
-                  color="black"
-                />
-             
-            </TouchableOpacity>
-    
-            <CustomText
-              variants="medium"
-              styles={{
-                fontWeight: "bold",
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {" "}
-              Today's WordSphere{" "}
-            </CustomText>
-    
-            <CustomText
-              styles={{
-                fontSize: height * 0.285,
-                fontWeight: "bold",
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {info?.word?.charAt(0)?.toUpperCase() + info?.word?.slice(1) }
-            </CustomText>
-    
-            <CustomText
-              variants="medium"
-              styles={{
-                fontWeight: "bold",
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {" "}
-              Definition{" "}
-            </CustomText>
-    
-            <CustomText
-              variants="small"
-              styles={{
-                fontWeight: "semibold",
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {info?.definition}
-            </CustomText>
-    
-            <CustomText
-              variants="medium"
-              styles={{
-                fontWeight: "bold",
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {" "}
-              Example{" "}
-            </CustomText>
-    
-            <CustomText
-              variants="small"
-              styles={{
-                fontWeight: "semibold",
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {info?.example}
-            </CustomText>
+            />
 
-            <CustomText
-              variants="small"
-              styles={{
-                textAlign: "center",
-                color: "black",
-              }}
-            >
-              {info?.timestamp}
+            <CustomText variants="large" styles={{ fontWeight: "bold" }}>
+              Nothing to show{" "}
             </CustomText>
           </View>
-        );
-      })}
-    </ScrollView>
-  )
-}
+        ) : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 50 }}
+          >
+            {historyData?.map((info, index) => {
+
+              return (
+                <View key={index} style={[styles.cardContainer, customStyle]}>
+
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      paddingHorizontal: 10,
+                      paddingVertical: 10,
+                      zIndex: 1,
+                    }}
+                    onPress={() => deleteCard(index)}
+                  >
+                    <TrashIcon size={20} color="black" />
+                  </TouchableOpacity>
+
+                  <CustomText
+                    variants="medium"
+                    styles={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {" "}
+                    Today's WordSphere{" "}
+                  </CustomText>
+
+                  <CustomText
+                    styles={{
+                      fontSize: height * 0.298,
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {info?.word?.charAt(0)?.toUpperCase() +
+                      info?.word?.slice(1)}
+                  </CustomText>
+
+                  <CustomText
+                    variants="medium"
+                    styles={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {" "}
+                    Definition{" "}
+                  </CustomText>
+
+                  <CustomText
+                    variants="small"
+                    styles={{
+                      fontWeight: "semibold",
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {info?.definition}
+                  </CustomText>
+
+                  <CustomText
+                    variants="medium"
+                    styles={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {" "}
+                    Example{" "}
+                  </CustomText>
+
+                  <CustomText
+                    variants="small"
+                    styles={{
+                      fontWeight: "semibold",
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {info?.example}
+                  </CustomText>
+
+                  <CustomText
+                    variants="small"
+                    styles={{
+                      textAlign: "center",
+                      color: "black",
+                    }}
+                  >
+                    {info?.timestamp}
+                  </CustomText>
+                </View>
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
 
       <View style={styles.btnContainer}>
         <View style={styles.btn}>
@@ -253,14 +216,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     position: "relative",
+    flex: 1,
   },
 
   btnContainer: {
-    flex:1
+    flex: 1,
+    flexGrow: 0,
   },
 
   btn: {
-    flex:1,
+    flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
   },
